@@ -1,5 +1,5 @@
 import React from "react";
-import Starter from "./tutorial/10-useReducer/starter/01-useReducer";
+import Starter from "./tutorial/11-performance/starter/01-lower-state/index";
 
 function App() {
   return (
