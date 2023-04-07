@@ -15,26 +15,26 @@ const initialState = {
 };
 
 const AppContextProvider = ({ children }) => {
-  const [state, disaptch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
   const { totalAmount, totalCost } = getTotals(state.cart);
 
   // clear cart
   const clearCart = () => {
-    disaptch({ type: CLEAR_CART });
+    dispatch({ type: CLEAR_CART });
   };
 
   // remove item
   const removeItem = id => {
-    disaptch({ type: REMOVE_ITEM, payload: { id } });
+    dispatch({ type: REMOVE_ITEM, payload: { id } });
   };
 
   // increase item
   const increaseItem = id => {
-    disaptch({ type: INCREASE_ITEM, payload: { id } });
+    dispatch({ type: INCREASE_ITEM, payload: { id } });
   };
   // decrease item
   const decreaseItem = id => {
-    disaptch({ type: DECREASE_ITEM, payload: { id } });
+    dispatch({ type: DECREASE_ITEM, payload: { id } });
   };
 
   useEffect(() => {
@@ -42,12 +42,12 @@ const AppContextProvider = ({ children }) => {
   }, []);
 
   const fetchData = async () => {
-    disaptch({ type: LOADING });
+    dispatch({ type: LOADING });
     try {
       const response = await fetch(url);
       const cart = await response.json();
       console.log("THE CART", cart);
-      disaptch({ type: DISPLAY_ITEMS, payload: { cart } });
+      dispatch({ type: DISPLAY_ITEMS, payload: { cart } });
     } catch (error) {
       console.log(error.message);
     }

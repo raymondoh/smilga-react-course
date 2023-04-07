@@ -29,7 +29,7 @@ const router = createBrowserRouter(
       <Route path="products/:id" element={<SingleProductPage />} />
       */}
       {/** Another section */}
-      <Route path="products">
+      <Route path="products" element={<ProductsLayout />}>
         <Route index element={<ProductsPage />} />
         <Route path=":id" element={<SingleProductPage />} />
       </Route>

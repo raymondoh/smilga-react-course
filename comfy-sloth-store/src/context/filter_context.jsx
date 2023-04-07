@@ -12,14 +12,27 @@ import {
 } from "../actions";
 import { useProductsContext } from "./products_context";
 
-const initialState = {};
+//
+const initialState = {
+  // this = state
+  filteredProducts: [],
+  allProducts: [],
+  gridView: true,
+};
 
 const FilterContext = createContext();
 
 const useFilterContext = () => useContext(FilterContext);
 
 const FilterContextProvider = ({ children }) => {
-  return <FilterContext.Provider value="filter context">{children}</FilterContext.Provider>;
+  const { products } = useProductsContext();
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    dispatch({ type: LOAD_PRODUCTS, payload: products });
+  }, [products]);
+
+  return <FilterContext.Provider value={{ ...state }}>{children}</FilterContext.Provider>;
 };
 
 export { FilterContext, FilterContextProvider, useFilterContext };

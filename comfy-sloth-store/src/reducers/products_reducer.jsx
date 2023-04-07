@@ -7,11 +7,61 @@ import {
   GET_SINGLE_PRODUCT_BEGIN,
   GET_SINGLE_PRODUCT_SUCCESS,
   GET_SINGLE_PRODUCT_ERROR,
-} from '../actions'
+} from "../actions";
 
 const products_reducer = (state, action) => {
-  return state
-  throw new Error(`No Matching "${action.type}" - action type`)
-}
+  switch (action.type) {
+    case SIDEBAR_OPEN:
+      return {
+        ...state,
+        isSidebarOpen: true,
+      };
+    case SIDEBAR_CLOSE:
+      return {
+        ...state,
+        isSidebarOpen: false,
+      };
+    case GET_PRODUCTS_BEGIN:
+      return {
+        ...state,
+        allProductsLoading: true,
+      };
+    case GET_PRODUCTS_SUCCESS:
+      const featured_products = action.payload.filter(products => products.featured === true);
+      return {
+        ...state,
+        allProductsLoading: false,
+        products: action.payload,
+        featuredProducts: featured_products,
+      };
+    case GET_PRODUCTS_ERROR:
+      return {
+        ...state,
+        allProductsError: true,
+        allProductsLoading: false,
+      };
 
-export default products_reducer
+    case GET_SINGLE_PRODUCT_BEGIN:
+      return {
+        ...state,
+        singleProductLoading: true,
+        singleProductError: false,
+      };
+    case GET_SINGLE_PRODUCT_SUCCESS:
+      return {
+        ...state,
+        singleProductLoading: false,
+        singleProduct: action.payload,
+      };
+    case GET_SINGLE_PRODUCT_ERROR:
+      return {
+        ...state,
+        singleProductLoading: false,
+        singleProductError: true,
+      };
+  }
+  return state;
+  throw new Error(`No Matching "${action.type}" - action type`);
+};
+
+export default products_reducer;
