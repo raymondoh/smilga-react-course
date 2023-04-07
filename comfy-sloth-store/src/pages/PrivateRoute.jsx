@@ -6,6 +6,7 @@ import { useUserContext } from "../context/user_context";
 
 const PrivateRoute = ({ children }) => {
   //const {} = useAuthContext();
+  //const {user} = useAuth0()
   const user = true;
 
   if (!user) {
