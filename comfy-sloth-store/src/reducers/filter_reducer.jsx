@@ -76,8 +76,64 @@ const filter_reducer = (state, action) => {
         filters: { ...state.filters, [name]: value },
       };
     case FILTER_PRODUCTS:
+      const { allProducts } = state;
+      const { searchText, company, category, color, price, shipping } = state.filters;
+      let temp_products = [...allProducts];
+      // filtering
+      //text
+      if (searchText) {
+        temp_products = temp_products.filter(product => {
+          return product.name.toLowerCase().startsWith(searchText);
+        });
+      }
+      //category
+      if (category !== "all") {
+        temp_products = temp_products.filter(product => {
+          return product.category === category;
+        });
+      }
+      //company
+      if (company !== "all") {
+        temp_products = temp_products.filter(product => {
+          return product.company === company;
+        });
+      }
+      // colors
+      if (color !== "all") {
+        temp_products = temp_products.filter(product => {
+          return product.colors.find(c => {
+            return c === color;
+          });
+        });
+      }
+
+      // price
+      temp_products = temp_products.filter(product => product.price <= price);
+
+      // shipping
+      if (shipping) {
+        temp_products = temp_products.filter(product => product.shipping === true);
+      }
+
       return {
         ...state,
+        filteredProducts: temp_products,
+      };
+    case CLEAR_FILTERS:
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          searchText: "",
+          company: "all",
+          category: "all",
+          color: "all",
+          //minPrice: 0,
+          //maxPrice: 0,
+          // price: 0,
+          price: state.filters.maxPrice,
+          shipping: false,
+        },
       };
   }
 
