@@ -6,11 +6,11 @@ import { FaTimes } from "react-icons/fa";
 import { links } from "../utils/constants";
 import styled from "styled-components";
 import CartButtons from "./CartButtons";
-import { useUserContext } from "../context/user_context";
+import { useAuthContext } from "../context/auth_context";
 
 const Sidebar = () => {
   const { isSidebarOpen, closeSidebar } = useProductsContext();
-  console.log(isSidebarOpen);
+  const { user } = useAuthContext();
 
   return (
     <SidebarContainer>
@@ -29,11 +29,13 @@ const Sidebar = () => {
               </li>
             );
           })}
-          <li>
-            <Link to="/checkout" onClick={closeSidebar}>
-              checkout
-            </Link>
-          </li>
+          {user && (
+            <li>
+              <Link to="/checkout" onClick={closeSidebar}>
+                checkout
+              </Link>
+            </li>
+          )}
         </ul>
         <CartButtons />
       </aside>

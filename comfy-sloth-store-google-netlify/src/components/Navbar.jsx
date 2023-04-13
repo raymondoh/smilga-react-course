@@ -6,10 +6,11 @@ import { Link } from "react-router-dom";
 import { links } from "../utils/constants";
 import CartButtons from "./CartButtons";
 import { useProductsContext } from "../context/products_context";
-import { useUserContext } from "../context/user_context";
+import { useAuthContext } from "../context/auth_context";
 
 const Nav = () => {
   const { openSidebar } = useProductsContext();
+  const { user } = useAuthContext();
   return (
     <NavContainer>
       <div className="nav-center">
@@ -30,6 +31,11 @@ const Nav = () => {
               </li>
             );
           })}
+          {user && (
+            <li>
+              <Link to="/checkout">checkout</Link>
+            </li>
+          )}
         </ul>
         <CartButtons />
       </div>

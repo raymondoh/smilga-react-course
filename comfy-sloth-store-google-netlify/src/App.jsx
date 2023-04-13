@@ -7,8 +7,10 @@ import {
   CheckoutPage,
   ErrorPage,
   HomePage,
+  LoginPage,
   PrivateRoute,
   ProductsPage,
+  SignupPage,
   SingleProductPage,
 } from "./pages";
 import RootLayout from "./layouts/RootLayout";
@@ -19,6 +21,8 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<HomePage />} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="signup" element={<SignupPage />} />
       <Route path="about" element={<AboutPage />} />
       <Route path="cart" element={<CartPage />} />
       {/** 

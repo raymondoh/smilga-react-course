@@ -1,16 +1,34 @@
 import React from "react";
 import { FaShoppingCart, FaUserMinus, FaUserPlus } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useProductsContext } from "../context/products_context";
 import { useCartContext } from "../context/cart_context";
-import { useUserContext } from "../context/user_context";
+import { useAuthContext } from "../context/auth_context";
 
 const CartButtons = () => {
+  const { user, login, logout } = useAuthContext();
   const { closeSidebar } = useProductsContext();
-  const { totalItems } = useCartContext();
+  const { totalItems, clearCart } = useCartContext();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/products");
+      //optional
+      clearCart();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
   return (
     <Wrapper className="cart-btn-wrapper">
+      {user && (
+        <React.Fragment>
+          <p>Hello, {user.email}</p>
+        </React.Fragment>
+      )}
       <Link to="/cart" className="cart-btn" onClick={closeSidebar}>
         {" "}
         cart
@@ -19,9 +37,27 @@ const CartButtons = () => {
           <span className="cart-value">{totalItems}</span>
         </span>
       </Link>
-      <button type="button" className="auth-btn">
-        Login <FaUserPlus />
-      </button>
+
+      {user && user ? (
+        <button onClick={handleLogout} type="button" className="auth-btn">
+          <Link to="/">
+            Logout <FaUserMinus />
+          </Link>
+        </button>
+      ) : (
+        <React.Fragment>
+          <button type="button" className="auth-btn">
+            <Link to="/login">
+              Login <FaUserPlus />
+            </Link>
+          </button>
+          {/**  <button type="button" className="btn">
+            <Link to="/signup">
+              Signup <FaUserPlus />
+            </Link>
+          </button>*/}
+        </React.Fragment>
+      )}
     </Wrapper>
   );
 };

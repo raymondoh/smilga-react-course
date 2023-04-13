@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useCartContext } from "../context/cart_context";
-import { useUserContext } from "../context/user_context";
+import { useAuthContext } from "../context/auth_context";
 import { formatPrice } from "../utils/helpers";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const CartTotals = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { totalAmount, shippingFee } = useCartContext();
+  const { user, login } = useAuthContext();
+  const navigate = useNavigate();
+
+  const handleLogin = async e => {
+    navigate("/login");
+  };
   return (
     <Wrapper>
       <div>
@@ -22,9 +31,15 @@ const CartTotals = () => {
             order total: <span>{formatPrice(totalAmount + shippingFee)}</span>
           </h4>
         </article>
-        <Link to="/checkout" className="btn">
-          proceed to checkout
-        </Link>
+        {user ? (
+          <Link to="/checkout" className="btn">
+            proceed to checkout
+          </Link>
+        ) : (
+          <button type="button" onClick={handleLogin} className="btn">
+            login
+          </button>
+        )}
       </div>
     </Wrapper>
   );

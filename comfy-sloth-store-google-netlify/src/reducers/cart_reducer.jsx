@@ -75,9 +75,11 @@ const cart_reducer = (state, action) => {
               amount: newAmount,
             };
           }
-        } else {
-          return item;
         }
+        return item;
+        // else {
+        //   return item;
+        // }
       });
       return {
         ...state,
