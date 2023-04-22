@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import FormRow from "../../components/FormRow";
 import FormRowSelect from "../../components/FormRowSelect";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 //store
 import { useSelector, useDispatch } from "react-redux";
-import { handleChange, clearValues } from "../../features/job/jobSlice";
-handleChange;
+import { handleChange, clearValues, createJob, editJob } from "../../features/job/jobSlice";
 
 const AddJob = () => {
   const {
@@ -21,7 +21,9 @@ const AddJob = () => {
     isEditing,
     editJobId,
   } = useSelector(state => state.job);
+  const { user } = useSelector(state => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleJobInput = e => {
     const name = e.target.name;
@@ -34,7 +36,20 @@ const AddJob = () => {
       toast.error("Please fill out all fields");
       return;
     }
+    if (isEditing) {
+      dispatch(editJob({ jobId: editJobId, job: { position, company, jobLocation, jobType, status } }));
+      navigate("/dashboard/alljobs");
+      return;
+    }
+    dispatch(createJob({ position, company, jobLocation, jobType, status }));
+    navigate("/dashboard/alljobs");
   };
+
+  useEffect(() => {
+    if (!isEditing) {
+      dispatch(handleChange({ name: "jobLocation", value: user.location }));
+    }
+  }, []);
   return (
     <Wrapper>
       <form className="form">
